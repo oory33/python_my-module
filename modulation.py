@@ -1,5 +1,4 @@
 import numpy as np
-import pyloudnorm as pyln
 
 
 def sinmod(signal, srate: int, freq: float, depth: float):
@@ -24,9 +23,6 @@ def sinmod(signal, srate: int, freq: float, depth: float):
     """
     duration = int(len(signal) / srate)
 
-    lufs_targ = -14
-    meter = pyln.Meter(srate)
-
     alpha = 1
     beta = depth * alpha
 
@@ -38,18 +34,19 @@ def sinmod(signal, srate: int, freq: float, depth: float):
     for i in range(len(index)):
         sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
 
-    # AM変調
-    mod_sig_l = (alpha + beta * sin_sig) * signal.T[0] * 100
+    mod = (alpha + (beta * sin_sig)) / (1 + depth)
 
-    mod_sig_r = (alpha + beta * sin_sig) * signal.T[1] * 100
+    # AM変調
+    mod_sig_l = mod * signal.T[0]
+    mod_sig_r = mod * signal.T[1]
 
     # 正規化
-    lufs_sorc_l = meter.integrated_loudness(mod_sig_l)
-    lufs_sorc_r = meter.integrated_loudness(mod_sig_r)
-    modsig_ln = pyln.normalize.loudness(mod_sig_l, lufs_sorc_l, lufs_targ)
-    modsig_rn = pyln.normalize.loudness(mod_sig_r, lufs_sorc_r, lufs_targ)
+    # lufs_sorc_l = meter.integrated_loudness(mod_sig_l)
+    # lufs_sorc_r = meter.integrated_loudness(mod_sig_r)
+    # modsig_ln = pyln.normalize.loudness(mod_sig_l, lufs_sorc_l, lufs_targ)
+    # modsig_rn = pyln.normalize.loudness(mod_sig_r, lufs_sorc_r, lufs_targ)
 
-    mod_sig_n = np.vstack([modsig_ln, modsig_rn]).T
+    mod_sig_n = np.vstack([mod_sig_l, mod_sig_r]).T
 
     return mod_sig_n
 
@@ -75,8 +72,6 @@ def RaisedCos(signal, srate: int, beta: float, length: float):
     -------
     Output signal in ndarray().
     """
-    lufs_targ = -14
-    meter = pyln.Meter(srate)
 
     window_length = int(srate * length / 1000)  # in bins
     T = 1 / window_length
