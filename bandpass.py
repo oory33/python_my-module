@@ -9,10 +9,10 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
     """
     Generate a Band Pass Noise signal.
     Requires:
-      pyloudnorm
-      numpy
-      math
-      scipy.io.wavfile.write
+        pyloudnorm
+        numpy
+        math
+        scipy.io.wavfile.write
 
     Parameters
     ----------
