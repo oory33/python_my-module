@@ -3,7 +3,9 @@ import numpy as np
 
 def sinmod(signal, srate: int, freq: float, depth: float):
     """
-    Sinosoidal Amplitude Modulation
+    Sinosoidal Amplitude Modulation.
+    Requires:
+        numpy
 
     Parameters
     ----------
@@ -39,12 +41,6 @@ def sinmod(signal, srate: int, freq: float, depth: float):
     # AM変調
     mod_sig_l = mod * signal.T[0]
     mod_sig_r = mod * signal.T[1]
-
-    # 正規化
-    # lufs_sorc_l = meter.integrated_loudness(mod_sig_l)
-    # lufs_sorc_r = meter.integrated_loudness(mod_sig_r)
-    # modsig_ln = pyln.normalize.loudness(mod_sig_l, lufs_sorc_l, lufs_targ)
-    # modsig_rn = pyln.normalize.loudness(mod_sig_r, lufs_sorc_r, lufs_targ)
 
     mod_sig_n = np.vstack([mod_sig_l, mod_sig_r]).T
 

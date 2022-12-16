@@ -6,6 +6,10 @@ from scipy.io.wavfile import write
 def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_direction: str):
     """
     Generate a Akeroyd signal.
+    Requires:
+        pyloudnorm
+        numpy
+        scipy
 
     Parameters
     ----------
