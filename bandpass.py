@@ -66,6 +66,9 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
     # IFFT
     sig = np.real(np.fft.ifft(fsig)) * 100
 
+    # cast
+    sig = sig.astype(np.float32)
+
     if type == "Mono":
         lufs_sorc = meter.integrated_loudness(sig)
 
@@ -90,6 +93,9 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
 
         # IFFT
         sig_r = np.real(np.fft.ifft(fsig_r)) * 100
+
+        # cast
+        sig_r = sig_r.astype(np.float32)
 
         lufs_sorc_l = meter.integrated_loudness(sig)
         lufs_sorc_r = meter.integrated_loudness(sig_r)
