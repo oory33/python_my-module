@@ -27,7 +27,7 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
 
     Returns
     -------
-    Output signal in wav format at current directory.
+    Output signal in 32-bit float wav format at current directory.
     """
 
     lufs_targ = -14

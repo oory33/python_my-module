@@ -20,7 +20,7 @@ def generate(srate: int, delay: int, duration: int, move_to: str):
 
     Returns
     -------
-    Output signal in wav format at current directory.
+    Output signal in 32-bit float wav format at current directory.
     """
     if move_to == "right":
         ud = 1
@@ -56,6 +56,10 @@ def generate(srate: int, delay: int, duration: int, move_to: str):
     # IFFT
     tsig = np.real(np.fft.ifft(fsig_sum))*100
     tshift = np.real(np.fft.ifft(fshift_sum))*100
+
+    # cast to 32bit float
+    tsig = tsig.astype(np.float32)
+    tshift = tshift.astype(np.float32)
 
     lufs_sorc_l = meter.integrated_loudness(tsig)
     lufs_sorc_r = meter.integrated_loudness(tshift)
