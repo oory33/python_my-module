@@ -6,6 +6,10 @@ from scipy.io.wavfile import write
 def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_direction: str):
     """
     Generate a Akeroyd signal.
+    Requires:
+        pyloudnorm
+        numpy
+        scipy
 
     Parameters
     ----------
@@ -24,7 +28,7 @@ def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_
 
     Returns
     -------
-    Output signal in wav format at current directory.
+    Output signal in 32-bit float wav format at current directory.
     """
     if init_direction == "left":
         ud = -1
@@ -72,6 +76,10 @@ def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_
     # IFFT
     tsig = np.real(np.fft.ifft(fsig))*100
     tshift = np.real(np.fft.ifft(fshift))*100
+
+    # cast
+    tsig = tsig.astype(np.float32)
+    tshift = tshift.astype(np.float32)
 
     # normalize
     lufs_sorc_l = meter.integrated_loudness(tsig)

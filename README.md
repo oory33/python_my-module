@@ -2,6 +2,8 @@
 
 These are the modules that generate a sound stimulus.
 
+Requires: numpy, scipy, pyloudnorm
+
 ## Modules
 
 ### akeroyd.py

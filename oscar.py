@@ -5,6 +5,29 @@ from scipy.io.wavfile import write
 
 
 def makeBPN(srate, bwd, fcenter, duration):
+    """
+    Generate a Band Pass Noise signal.
+    Requires:
+        pyloudnorm
+        numpy
+        math
+        scipy.io.wavfile.write
+
+    Parameters
+    ----------
+    srate : int
+        Sampling rate.
+    bwd : int
+        Bandwidth in Hz.
+    fcenter : int
+        Centre frequency of bandpass filter in Hz.
+    duration : int
+        Total duration in seconds.
+
+    Returns
+    -------
+    Output Band Pass Noise signal as ndarray.
+    """
     fs = srate * duration
     fc = fcenter * duration
     width = bwd * duration
@@ -24,6 +47,32 @@ def makeBPN(srate, bwd, fcenter, duration):
 
 
 def generate(srate, fcs, bwds, shifts, duration):
+    """
+    Generate a Oscor singal.
+
+    Requires:
+        pyloudnorm
+        numpy
+        math
+        scipy.io.wavfile.write
+
+    Parameters
+    ----------
+    srate : int
+        Sampling rate.
+    fcs : int
+        Centre frequency of bandpass filter in Hz.
+    bwds : int
+        Bandwidth in Hz.
+    shifts : int
+        Shifting frequency in Hz.
+    duration : int
+        Total duration in seconds.
+
+    Returns
+    -------
+    Output signal in 32-bit float wav format at current directory.
+    """
     # fs = srate  # sampring rate
     # fc  # center frequency
     # bwd  # bandwidth
@@ -54,6 +103,10 @@ def generate(srate, fcs, bwds, shifts, duration):
     sig_l = sig_BPN * sin_sig * 2
     shift_sig = sig_BPN2 * shft_sin_sig * 2
     sig_r = (sig_l + shift_sig)
+
+    # cast to 32bit float
+    sig_l = sig_l.astype(np.float32)
+    sig_r = sig_r.astype(np.float32)
 
     # normalize
     lufs_sorc_l = meter.integrated_loudness(sig_l.T)

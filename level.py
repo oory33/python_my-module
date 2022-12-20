@@ -5,6 +5,31 @@ import math
 
 
 def generate(srate, fc_i, bwd_i, shft_freq_i, duration):
+    """
+    Generate a Band Pass Noise signal with ILD panning.
+    Requires:
+        pyloudnorm
+        numpy
+        math
+        scipy.io.wavfile.write
+
+    Parameters
+    ----------
+    srate : int
+        Sampling rate.
+    fc_i : int
+        Centre frequency of bandpass filter in Hz.
+    bwd_i : int
+        Bandwidth in Hz.
+    shft_freq_i : int
+        Shifting frequency in Hz.
+    duration : int
+        Total duration in seconds.
+
+    Returns
+    -------
+    Output signal in 32-bit float wav format at current directory.
+    """
     fs = srate * duration
     fc = fc_i * duration
     bwd = bwd_i * duration
@@ -40,6 +65,10 @@ def generate(srate, fc_i, bwd_i, shft_freq_i, duration):
 
     sig_l = sig_base * cos_sig_l * 10
     sig_r = sig_base * cos_sig_r * 10
+
+    # cast to 32bit float
+    sig_l = sig_l.astype(np.float32)
+    sig_r = sig_r.astype(np.float32)
 
     # normalize
     lufs_sorc_l = meter.integrated_loudness(sig_l.T)

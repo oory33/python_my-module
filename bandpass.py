@@ -1,8 +1,6 @@
 import numpy as np
 import pyloudnorm as pyln
-import math
 from scipy.io.wavfile import write
-import matplotlib.pyplot as plt
 
 
 def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
@@ -29,7 +27,7 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
 
     Returns
     -------
-    Output signal in wav format at current directory.
+    Output signal in 32-bit float wav format at current directory.
     """
 
     lufs_targ = -14
@@ -45,11 +43,11 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
     bwdhigh_bin = (centre + int(bwd/2)) * duration
 
     # 通過帯域内の信号生成
-    arg = np.random.normal(0, math.pi, bwd_bin)
+    arg = np.random.normal(0, np.pi, bwd_bin)
     fsig_inbwd = np.ndarray((0, np.size(bwd_bin)))
     for i in arg:
-        x = math.cos(i)
-        y = math.sin(i)
+        x = np.cos(i)
+        y = np.sin(i)
         num = x + 1j * y
         fsig_inbwd = np.append(fsig_inbwd, num)
 
@@ -78,11 +76,11 @@ def generate(srate: int, duration: int, bwd: int, centre: int, type: str):
 
         write("bandpass.wav", srate, output.T)
     elif type == "Stereo":
-        arg_r = np.random.normal(0, math.pi, bwd_bin)
+        arg_r = np.random.normal(0, np.pi, bwd_bin)
         fsig_inbwd_r = np.ndarray((0, np.size(bwd_bin)))
         for i in arg_r:
-            x = math.cos(i)
-            y = math.sin(i)
+            x = np.cos(i)
+            y = np.sin(i)
             num = x + 1j * y
             fsig_inbwd_r = np.append(fsig_inbwd_r, num)
         fsig_left_r = np.hstack([dc, btm_zero, fsig_inbwd_r, top_zero])
