@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def sinmod(signal, srate: int, freq: float, depth: float):
+def SinMod(**kwargs):
     """
     Sinosoidal Amplitude Modulation.
     Requires:
@@ -23,20 +23,21 @@ def sinmod(signal, srate: int, freq: float, depth: float):
     -------
     Output signal in ndarray() .
     """
-    duration = int(len(signal) / srate)
+    signal = kwargs["signal"]
+    duration = int(len(signal) / kwargs["srate"])
 
     alpha = 1
-    beta = depth * alpha
+    beta = kwargs["depth"] * alpha
 
     # 正弦波生成
-    phi = freq / srate
-    index = np.array(range(srate*duration))
+    phi = kwargs["freq"] / kwargs["srate"]
+    index = np.array(range(kwargs["srate"]*duration))
     sin_sig = np.zeros(len(index))
 
     for i in range(len(index)):
         sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
 
-    mod = (alpha + (beta * sin_sig)) / (1 + depth)
+    mod = (alpha + (beta * sin_sig)) / (1 + kwargs["depth"])
 
     # AM変調
     mod_sig_l = mod * signal.T[0]
@@ -48,7 +49,7 @@ def sinmod(signal, srate: int, freq: float, depth: float):
 
 
 # raised-cosのOnset/Offset
-def RaisedCos(signal, srate: int, beta: float, length: float):
+def RaisedCos(**kwargs):
     """
     Raised-cosine window. Cuttoff would be half of the Nyquist frequency.
 
@@ -69,11 +70,12 @@ def RaisedCos(signal, srate: int, beta: float, length: float):
     Output signal in ndarray().
     """
 
-    window_length = int(srate * length / 1000)  # in bins
+    signal = kwargs["signal"]
+    window_length = int(kwargs["srate"] * kwargs["length"] / 1000)  # in bins
     T = 1 / window_length
 
-    a_1 = int((1-beta)/(2 * T))
-    a_2 = int((1+beta)/(2 * T))
+    a_1 = int((1-kwargs["beta"])/(2 * T))
+    a_2 = int((1+kwargs["beta"])/(2 * T))
 
     H_f = np.zeros(window_length, dtype=float)
 
@@ -81,7 +83,7 @@ def RaisedCos(signal, srate: int, beta: float, length: float):
         H_f[i] = 1
 
     for i in range(a_1, a_2):
-        H_f[i] = 0.5 * (1 + np.cos((np.pi*T/beta) * (i - a_1)))
+        H_f[i] = 0.5 * (1 + np.cos((np.pi*T/kwargs["beta"]) * (i - a_1)))
 
     H_on = np.conj(np.flip(H_f))
 
@@ -102,3 +104,5 @@ def RaisedCos(signal, srate: int, beta: float, length: float):
     out = np.vstack([sig_l, sig_r]).T
 
     return out
+
+def

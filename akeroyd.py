@@ -3,7 +3,7 @@ import pyloudnorm as pyln
 from scipy.io.wavfile import write
 
 
-def generate(**kwargs):
+def Generate(**kwargs):
     """
     Generate a Akeroyd signal.
     Requires:
@@ -94,7 +94,7 @@ def generate(**kwargs):
     write('akeroyd.wav', kwargs["srate"], sig.T)
 
 
-def genrate_init_ipd(**kwargs):
+def GenrateInitIpd(**kwargs):
     """
     Generate a Akeroyd signal with initial IPD.
     Requires:
@@ -181,7 +181,7 @@ def genrate_init_ipd(**kwargs):
 
     # 刺激の切り取り
     onset = int((kwargs["init_ipd"] / 360) *
-                (1/kwargs["shift"])) * kwargs["srate"]
+                (1/kwargs["shift"]) * kwargs["srate"])
     offset = onset + (kwargs["duration"] * kwargs["srate"])
     tsig_out = tsig[onset:offset]
     tshift_out = tshift[onset:offset]
