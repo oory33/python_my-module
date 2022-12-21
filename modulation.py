@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def SinMod(**kwargs):
@@ -147,16 +146,18 @@ def HalfSinMod(**kwargs):
     sin_sig = np.zeros(len(index))
 
     for i in range(len(index)):
-        if (((phi * index[i]) + (3/2)*np.pi) // 2) is 0:
-            sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
+        # 偶数回目の回転なら
+        if (index[i] // (1 / phi)) % 2 == 0:
+            sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + ((3/2)*np.pi))
         else:
-            sin_sig[i] = 0
+            sin_sig[i] = -1
 
-    plt.plot(sin_sig)
+    # 正規化、最大値が1になる様に
+    mod = (alpha + (beta * sin_sig)) / (1 + kwargs["depth"])
 
     # AM変調
-    mod_sig_l = sin_sig * signal.T[0]
-    mod_sig_r = sin_sig * signal.T[1]
+    mod_sig_l = mod * signal.T[0]
+    mod_sig_r = mod * signal.T[1]
 
     mod_sig_n = np.vstack([mod_sig_l, mod_sig_r]).T
 
