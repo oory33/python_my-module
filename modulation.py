@@ -51,7 +51,7 @@ def SinMod(**kwargs):
 # raised-cosのOnset/Offset
 def RaisedCos(**kwargs):
     """
-    Raised-cosine window. Cuttoff would be half of the Nyquist frequency.
+    Raised-cosine window modulation. Cuttoff would be half of the Nyquist frequency.
 
     Parameters
     ----------
@@ -105,4 +105,51 @@ def RaisedCos(**kwargs):
 
     return out
 
-def
+def HalfSinMod(**kwargs):
+    """
+    Half-sin modulation.
+
+    Parameters
+    ----------
+    signal : ndarray()
+        shape: (n,2)
+        input signal(stereo)
+    srate : int
+        sampling rate in Hz.
+    freq : float
+        modulation frequency in Hz.
+    depth : float
+        modulation depth(0-1).
+
+    Returns
+    -------
+    Output signal in ndarray().
+    """
+
+    signal = kwargs["signal"]
+    duration = int(len(signal) / kwargs["srate"])
+
+    alpha = 1
+    beta = kwargs["depth"] * alpha
+
+    # 正弦波生成
+    phi = kwargs["freq"] / kwargs["srate"]
+    index = np.array(range(kwargs["srate"]*duration))
+    sin_sig = np.zeros(len(index))
+
+    for i in range(len(index)):
+        sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
+
+    for i in range(len(sin_sig)):
+        if sin_sig[i] < 0:
+            sin_sig[i] = 0
+
+    mod = (alpha + (beta * sin_sig)) / (1 + kwargs["depth"])
+
+    # AM変調
+    mod_sig_l = mod * signal.T[0]
+    mod_sig_r = mod * signal.T[1]
+
+    mod_sig_n = np.vstack([mod_sig_l, mod_sig_r]).T
+
+    return mod_sig_n
