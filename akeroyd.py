@@ -180,14 +180,19 @@ def genrate_init_ipd(**kwargs):
     tshift = tshift.astype(np.float32)
 
     # 刺激の切り取り
-    onset = int((kwargs["init_ipd"] / 360) * (1/kwargs["shift"]))
-    offset = onset + kwargs["duration"] * kwargs["srate"]
-    tsig = tsig[onset:offset]
-    tshift = tshift[onset:offset]
+    onset = int((kwargs["init_ipd"] / 360) *
+                (1/kwargs["shift"])) * kwargs["srate"]
+    offset = onset + (kwargs["duration"] * kwargs["srate"])
+    tsig_out = tsig[onset:offset]
+    tshift_out = tshift[onset:offset]
 
     # normalize
-    lufs_sorc_l = meter.integrated_loudness(tsig)
-    lufs_sorc_r = meter.integrated_loudness(tshift)
+    lufs_sorc_l = meter.integrated_loudness(tsig_out)
+    lufs_sorc_r = meter.integrated_loudness(tshift_out)
 
-    tsig_n = pyln.normalize.loudness(tsig, lufs_sorc_l, lufs_targ)
-    tshift_n = pyln.normalize.loudness(tshift, lufs_sorc_r, lufs_targ)
+    tsig_n = pyln.normalize.loudness(tsig_out, lufs_sorc_l, lufs_targ)
+    tshift_n = pyln.normalize.loudness(tshift_out, lufs_sorc_r, lufs_targ)
+
+    sig = np.vstack([tsig_n, tshift_n])
+
+    write('akeroyd.wav', kwargs["srate"], sig.T)
