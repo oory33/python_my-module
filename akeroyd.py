@@ -3,7 +3,7 @@ import pyloudnorm as pyln
 from scipy.io.wavfile import write
 
 
-def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_direction: str):
+def generate(**kwargs):
     """
     Generate a Akeroyd signal.
     Requires:
@@ -30,23 +30,24 @@ def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_
     -------
     Output signal in 32-bit float wav format at current directory.
     """
-    if init_direction == "left":
+    if kwargs["init_direction"] == "left":
         ud = -1
-    elif init_direction == "right":
+    elif kwargs["init_direction"] == "right":
         ud = 1
 
     lufs_targ = -14
-    meter = pyln.Meter(srate)
+    meter = pyln.Meter(kwargs["srate"])
 
     # 周波数をbin数に直す
-    total_bin = srate * duration
+    total_bin = kwargs["srate"] * kwargs["duration"]
     nq_bin = int(total_bin / 2)
-    shift_bin = shift * duration
-    bwd_bin = bwd * duration
+    shift_bin = kwargs["shift"] * kwargs["duration"]
+    bwd_bin = kwargs["bwd"] * kwargs["duration"]
 
     # 通過帯域の上限下限のbin番号
-    bwdlow_bin = (centre - int(bwd/2)) * duration
-    bwdhigh_bin = (centre + int(bwd/2)) * duration
+    bwdlow_bin = (kwargs["centre"] - int(kwargs["bwd"]/2)) * kwargs["duration"]
+    bwdhigh_bin = (kwargs["centre"] + int(kwargs["bwd"]/2)
+                   ) * kwargs["duration"]
 
     # 通過帯域内の信号生成
     fsig_inbwd = np.random.normal(size=bwd_bin) + 1j * \
@@ -90,7 +91,7 @@ def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_
 
     sig = np.vstack([tsig_n, tshift_n])
 
-    write('akeroyd.wav', srate, sig.T)
+    write('akeroyd.wav', kwargs["srate"], sig.T)
 
 
 def genrate_init_ipd(**kwargs):
