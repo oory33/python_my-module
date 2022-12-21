@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def SinMod(**kwargs):
@@ -37,6 +38,7 @@ def SinMod(**kwargs):
     for i in range(len(index)):
         sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
 
+    # 正規化、最大値が1になる様に
     mod = (alpha + (beta * sin_sig)) / (1 + kwargs["depth"])
 
     # AM変調
@@ -52,6 +54,9 @@ def SinMod(**kwargs):
 def RaisedCos(**kwargs):
     """
     Raised-cosine window modulation. Cuttoff would be half of the Nyquist frequency.
+
+    Requires:
+        numpy
 
     Parameters
     ----------
@@ -105,9 +110,13 @@ def RaisedCos(**kwargs):
 
     return out
 
+
 def HalfSinMod(**kwargs):
     """
     Half-sin modulation.
+
+    Requires:
+        numpy
 
     Parameters
     ----------
@@ -138,17 +147,16 @@ def HalfSinMod(**kwargs):
     sin_sig = np.zeros(len(index))
 
     for i in range(len(index)):
-        sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
-
-    for i in range(len(sin_sig)):
-        if sin_sig[i] < 0:
+        if (((phi * index[i]) + (3/2)*np.pi) // 2) is 0:
+            sin_sig[i] = np.sin(2 * np.pi * phi * index[i] + (3/2)*np.pi)
+        else:
             sin_sig[i] = 0
 
-    mod = (alpha + (beta * sin_sig)) / (1 + kwargs["depth"])
+    plt.plot(sin_sig)
 
     # AM変調
-    mod_sig_l = mod * signal.T[0]
-    mod_sig_r = mod * signal.T[1]
+    mod_sig_l = sin_sig * signal.T[0]
+    mod_sig_r = sin_sig * signal.T[1]
 
     mod_sig_n = np.vstack([mod_sig_l, mod_sig_r]).T
 
