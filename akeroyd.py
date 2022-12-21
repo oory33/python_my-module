@@ -93,7 +93,7 @@ def generate(srate: int, shift: int, duration: int, bwd: int, centre: int, init_
     write('akeroyd.wav', srate, sig.T)
 
 
-def genrate_init_ipd(kwargs):
+def genrate_init_ipd(**kwargs):
     """
     Generate a Akeroyd signal with initial IPD.
     Requires:
