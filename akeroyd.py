@@ -118,6 +118,8 @@ def GenrateInitIpd(**kwargs):
         Initial direction of shift. Either "left" or "right".
     init_ipd : float
         Initial IPD in degree.
+    file_name : str
+        Output file name.(optional)
 
     Returns
     -------
@@ -128,6 +130,11 @@ def GenrateInitIpd(**kwargs):
         ud = -1
     elif kwargs["init_direction"] == "right":
         ud = 1
+
+    if "file_name" in kwargs:
+        file_name = kwargs["file_name"]
+    else:
+        file_name = "akeroyd_%s.wav" % kwargs["init_ipd"]
 
     lufs_targ = -14
     meter = pyln.Meter(kwargs["srate"])
@@ -195,4 +202,4 @@ def GenrateInitIpd(**kwargs):
 
     sig = np.vstack([tsig_n, tshift_n])
 
-    write('akeroyd.wav', kwargs["srate"], sig.T)
+    write(file_name, kwargs["srate"], sig.T)
