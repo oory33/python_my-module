@@ -120,6 +120,8 @@ def GenrateInitIpd(**kwargs):
         Initial IPD in degree.
     file_name : str
         Output file name.(optional)
+    wav : bool
+        Output wav file or not. If False, output numpy array.(optional)
 
     Returns
     -------
@@ -202,4 +204,7 @@ def GenrateInitIpd(**kwargs):
 
     sig = np.vstack([tsig_n, tshift_n])
 
-    write(file_name, kwargs["srate"], sig.T)
+    if "wav" in kwargs:
+        write(file_name, kwargs["srate"], sig.T)
+    else:
+        return sig.T
