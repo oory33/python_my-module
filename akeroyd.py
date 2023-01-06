@@ -152,7 +152,7 @@ def GenrateInitIpd(**kwargs):
     bwdlow_bin = (kwargs["centre"] - int(kwargs["bwd"]/2)) * false_dur
     bwdhigh_bin = (kwargs["centre"] + int(kwargs["bwd"]/2)) * false_dur
 
-    ## 信号生成 ##
+    ## ---信号生成--- ##
 
     # 通過帯域内の信号生成
     fsig_inbwd = np.random.normal(size=bwd_bin) + 1j * \
