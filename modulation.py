@@ -134,7 +134,7 @@ def HalfSinMod(**kwargs):
     Output signal in ndarray().
     """
 
-    signal = np.ndarray(kwargs["signal"])
+    signal = kwargs["signal"]
     duration = int(len(signal) / kwargs["srate"])
 
     alpha = 1
