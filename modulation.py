@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def SinMod(**kwargs):
@@ -154,6 +155,8 @@ def HalfSinMod(**kwargs):
 
     # 正規化、最大値が1になる様に
     mod = (alpha + (beta * sin_sig)) / (1 + kwargs["depth"])
+
+    plt.plot(mod)
 
     # AM変調
     mod_sig_l = mod * signal.T[0]
