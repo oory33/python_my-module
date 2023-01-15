@@ -121,7 +121,7 @@ def GenrateInitIpd(**kwargs):
     file_name : str
         Output file name.(optional)
     wav : bool
-        Output wav file or not. If False, output numpy array.(optional)
+        Output wav file or not. If True, output wavfile.(optional)
 
     Returns
     -------
