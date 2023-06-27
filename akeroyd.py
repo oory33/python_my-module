@@ -91,7 +91,9 @@ def Generate(**kwargs):
 
     sig = np.vstack([tsig_n, tshift_n])
 
-    write('akeroyd.wav', kwargs["srate"], sig.T)
+    file_name = "akeroyd" + str(kwargs["bwd"]) + ".wav"
+
+    write(file_name, kwargs["srate"], sig.T)
 
 
 def GenrateInitIpd(**kwargs):
