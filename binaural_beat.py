@@ -30,7 +30,7 @@ def GenerateNoise(**kwargs):
     --------
     Output signal in 32-bit float wav format at current directory.
     """
-    lufs_targ = -14
+    lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
 
     if "file_name" in kwargs:
@@ -125,8 +125,13 @@ def Generate(**kwargs):
     Output signal in 32-bit float wav format at current directory.
     """
 
-    lufs_targ = -14
+    lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
+
+    if "file_name" in kwargs:
+        file_name = kwargs["file_name"]
+    else:
+        file_name = "%s_%s.wav" % (kwargs["freq"], kwargs["shift"])
 
     # sample数を決定
     length = kwargs["duration"] * kwargs["srate"]
@@ -147,6 +152,6 @@ def Generate(**kwargs):
     # 信号を出力
     sig = np.vstack([sig_l_n, sig_r_n])
     if "wav" in kwargs:
-        write(kwargs["file_name"], kwargs["srate"], sig.T)
+        write(file_name, kwargs["srate"], sig.T)
     else:
         return sig.T

@@ -42,9 +42,9 @@ def Generate(**kwargs):
     if "file_name" in kwargs:
         file_name = kwargs["file_name"]
     else:
-        file_name = "akeroyd_%s.wav" % kwargs["bwd"]
+        file_name = "akeroyd_%s.wav" % kwargs["shift"]
 
-    lufs_targ = -14
+    lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
 
     # 周波数をbin数に直す
@@ -108,7 +108,6 @@ def Generate(**kwargs):
         return sig.T
 
 
-
 def GenerateInitIpd(**kwargs):
     """
     Generate a Akeroyd signal with initial IPD.
@@ -153,7 +152,7 @@ def GenerateInitIpd(**kwargs):
     else:
         file_name = "akeroyd_%s.wav" % kwargs["init_ipd"]
 
-    lufs_targ = -14
+    lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
 
     # 周波数をbin数に直す
