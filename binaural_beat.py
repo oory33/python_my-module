@@ -38,8 +38,10 @@ def Generate(**kwargs):
     length = kwargs["duration"] * kwargs["srate"]
 
     # 信号を生成
-    sig_l = np.sin(np.linspace(0, 2 * np.pi * kwargs["freq"], length))
-    sig_r = np.sin(np.linspace(0, 2 * np.pi * (kwargs["freq"] + kwargs["shift"]), length))
+    sig_l = np.sin(np.linspace(
+        0, 2 * np.pi * kwargs["freq"] * kwargs["duration"], length))
+    sig_r = np.sin(np.linspace(
+        0, 2 * np.pi * (kwargs["freq"] + kwargs["shift"]) * kwargs["duration"], length))
 
     # normalize
     lufs_sorc_l = meter.integrated_loudness(sig_l)
