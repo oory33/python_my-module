@@ -73,7 +73,9 @@ def GenerateNoise(**kwargs):
     elif kwargs["phase"] == "normal":
         fsig_r_inbwd = np.random.normal(size=bwd_bin) + 1j * \
             np.random.normal(size=bwd_bin)
-        fsig_r = np.hstack([dc, btm_zero, fsig_r_inbwd, top_zero])
+        fsig_r_left = np.hstack([dc, btm_zero, fsig_r_inbwd, top_zero])
+        fsig_r_right = np.conj(np.flipud(fsig_r_left[1:nq_bin]))
+        fsig_r = np.hstack([fsig_r_left, fsig_r_right])
         tsig_r = np.real(np.fft.ifft(fsig_r))*100
 
     # cast
