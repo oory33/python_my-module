@@ -25,6 +25,10 @@ def Generate(**kwargs):
         Centre frequency of bandpass filter in Hz.
     init_direction : str
         Initial direction of shift. Either "left" or "right".
+    file_name : str
+        Output file name.(optional)
+    wav : bool
+        Output wav file or not. If True, output wavfile.(optional)
 
     Returns
     -------
@@ -34,6 +38,11 @@ def Generate(**kwargs):
         ud = -1
     elif kwargs["init_direction"] == "right":
         ud = 1
+
+    if "file_name" in kwargs:
+        file_name = kwargs["file_name"]
+    else:
+        file_name = "akeroyd_%s.wav" % kwargs["bwd"]
 
     lufs_targ = -14
     meter = pyln.Meter(kwargs["srate"])
@@ -91,12 +100,16 @@ def Generate(**kwargs):
 
     sig = np.vstack([tsig_n, tshift_n])
 
-    file_name = "akeroyd" + str(kwargs["bwd"]) + ".wav"
+    sig = np.vstack([tsig_n, tshift_n])
 
-    write(file_name, kwargs["srate"], sig.T)
+    if "wav" in kwargs:
+        write(file_name, kwargs["srate"], sig.T)
+    else:
+        return sig.T
 
 
-def GenrateInitIpd(**kwargs):
+
+def GenerateInitIpd(**kwargs):
     """
     Generate a Akeroyd signal with initial IPD.
     Requires:
