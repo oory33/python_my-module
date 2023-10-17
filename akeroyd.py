@@ -25,6 +25,8 @@ def Generate(**kwargs):
         Centre frequency of bandpass filter in Hz.
     init_direction : str
         Initial direction of shift. Either "left" or "right".
+    LUFS : int
+        Loundess value of output signal in LUFS.(optional)
     file_name : str
         Output file name.(optional)
     wav : bool
@@ -44,7 +46,10 @@ def Generate(**kwargs):
     else:
         file_name = "akeroyd_%s.wav" % kwargs["shift"]
 
-    lufs_targ = -17
+    if 'LUFS' in kwargs:
+        lufs_targ = kwargs["LUFS"]-3
+    else:
+        lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
 
     # 周波数をbin数に直す
@@ -132,6 +137,8 @@ def GenerateInitIpd(**kwargs):
         Initial direction of shift. Either "left" or "right".
     init_ipd : float
         Initial IPD in degree.
+    LUFS : int
+        Loundess value of output signal in LUFS.(optional)
     file_name : str
         Output file name.(optional)
     wav : bool
@@ -152,7 +159,10 @@ def GenerateInitIpd(**kwargs):
     else:
         file_name = "akeroyd_%s.wav" % kwargs["init_ipd"]
 
-    lufs_targ = -17
+    if 'LUFS' in kwargs:
+        lufs_targ = kwargs["LUFS"]-3
+    else:
+        lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
 
     # 周波数をbin数に直す

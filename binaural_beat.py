@@ -115,6 +115,8 @@ def Generate(**kwargs):
       Total duration in seconds.
     freq : int
       Frequency of pure tone in Hz.
+    LUFS : int
+      Loudness in LUFS. Default is -14.(optional)
     file_name : str
       Output file name.(optional)
     wav : bool
@@ -125,7 +127,10 @@ def Generate(**kwargs):
     Output signal in 32-bit float wav format at current directory.
     """
 
-    lufs_targ = -17
+    if "LUFS" in kwargs:
+        lufs_targ = kwargs["LUFS"]
+    else:
+      lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])
 
     if "file_name" in kwargs:
