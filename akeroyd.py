@@ -47,7 +47,7 @@ def Generate(**kwargs):
         file_name = "akeroyd_%s.wav" % kwargs["shift"]
 
     if 'LUFS' in kwargs:
-        lufs_targ = kwargs["LUFS"]-3
+        lufs_targ = kwargs["LUFS"]
     else:
         lufs_targ = -17
     meter = pyln.Meter(kwargs["srate"])

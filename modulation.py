@@ -1,4 +1,5 @@
 import numpy as np
+import soundfile as sf
 
 
 def SinMod(**kwargs):
@@ -47,6 +48,71 @@ def SinMod(**kwargs):
     mod_sig_n = np.vstack([mod_sig_l, mod_sig_r]).T
 
     return mod_sig_n
+
+# Cosine RampのOnset/Offset
+def CosRamp(**kwargs):
+    """"
+    Add Cosine Ramp Onset/Offset to the Signal.
+
+    Requires:
+        numpy
+        pysoundfile
+
+    Parameters
+    ----------
+    data : ndarray() or str
+        shape: (n,2)
+        input signal. (stereo) or wav file path.
+    srate : int
+        sampling rate in Hz.
+    length : float
+        window length in miliseconds.
+    mode : str
+        "SIGNAL" or "WAV". (default is SIGNAL)
+
+    Returns
+    -------
+    Output signal in ndarray().(SIGNAL mode)
+    Output signal in as wav file.(WAV mode)
+    """
+
+    if "mode" in kwargs:
+        mode = kwargs["mode"]
+    else:
+        mode = "SIGNAL"
+
+    if mode == "SIGNAL":
+        data = kwargs["data"]
+        lch = data.T[0]
+        rch = data.T[1]
+        srate = kwargs["srate"]
+        length = int(kwargs["length"] * srate / 1000)
+    else:
+        data, srate = sf.read(kwargs["data"])
+        lch = data.T[0]
+        rch = data.T[1]
+        length = int(kwargs["length"] * srate / 1000)
+
+    cos = np.zeros(length*2)
+    for i in range(length*2):
+        cos[i] = (1 - np.cos(np.pi * i / length))/2
+
+    onset = cos[0:length-1]
+    offset = cos[length:length*2]
+
+    lch[0:length-1] = lch[0:length-1] * onset
+    lch[len(lch)-length:len(lch)] = lch[len(lch)-length:len(lch)] * offset
+    rch[0:length-1] = rch[0:length-1] * onset
+    rch[len(rch)-length:len(rch)] = rch[len(rch)-length:len(rch)] * offset
+
+    out = np.vstack([lch, rch]).T
+
+    if mode == "SIGNAL":
+        return out
+    else:
+        sf.write(kwargs["data"], out, srate)
+        return
+
 
 
 # raised-cosのOnset/Offset
